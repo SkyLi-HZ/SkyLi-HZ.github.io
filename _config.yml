@@ -79,5 +79,5 @@ theme: landscape
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository: https://github.com/SkyLi-HZ/SkyLi-HZ.github.io
+  repository: https://github_token@github.com/SkyLi-HZ/SkyLi-HZ.github.io
   branch: master
