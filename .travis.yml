@@ -1,0 +1,11 @@
+language: node_js
+node_js: stable
+
+script:
+  - hexo clean
+  - hexo g
+  - hexo d
+
+branches:
+  only:
+    - hexo
