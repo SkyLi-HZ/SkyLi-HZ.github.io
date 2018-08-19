@@ -4,7 +4,7 @@
 ## About Page: `hexo new page about`
 ## Tags Cloud Page: `hexo new page tags`
 menu:
-  博客首页: http://bestwing.me
+  博客首页: https://skyli-hz.github.io/
   文章归档: /archives
   学习导航: /CTFStudy
   PWNABLE: /PWNABLE
@@ -14,7 +14,7 @@ menu:
 avatar: img/head.jpg
 
 # Small icon of Your site | 站点小图标地址
-favicon: "http://oayoilchh.bkt.clouddn.com/2016/07/27/18:05:26%20"
+favicon: "https://raw.githubusercontent.com/lz330718637/Images/master/20180819231010.png"
 
 
 # Social info. Bar | 社交信息展示
@@ -23,12 +23,12 @@ favicon: "http://oayoilchh.bkt.clouddn.com/2016/07/27/18:05:26%20"
 ## RSS requires a plugin to take effect | 使用 RSS 需先安装对应插件
 ## https://github.com/hexojs/hexo-generator-feed
 subnav:
-  mail: "http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=kvH99PT39-Dn_efS5PvivOPjvPH9-w"
-  github: "https://github.com/WinMin"
-  zhihu: "https://www.zhihu.com/people/Swings"
-  weibo: "http://weibo.com/2672317963/profile?topnav=1&wvr=6&is_all=1"
-  rss: /atom.xml
-  # facebook: "#"
+  facebook: "https://www.facebook.com/sky.li.7712"
+  mail: ""
+  github: ""
+  zhihu: ""
+  weibo: ""
+  #rss: /atom.xml
   # rss: /atom.xml
   # pinterest: "#"
   # QQ: "#"
@@ -129,35 +129,7 @@ tagcloud: true
 # Blogroll, Link exchange | 友情链接
 # friends: false
 friends:
-  Yllen: http://ring3.xyz/
-  麦香浓郁: http://mxny.org/
-  K0sh1: http://whereisk0shl.top/
-  信鑫: http://www.ycjcl.cc/
-  ByStundet表哥: http://bystudent.com/
-  汪神_Jarvis: https://www.jarviswang.me/
-  Chu: http://sh3ll.me/
-  4ido10n: https://www.hackfun.org/
-  L3m0n: http://www.cnblogs.com/iamstudy
-  muhe: http://o0xmuhe.me/
-  _画船听雨: http://blog.nuptzj.cn/
-  Virink: http://www.virzz.com/index.html
-  国光: http://www.sqlsec.com/
-  老锥: http://www.bodkin.ren/
-  C1zel: http://www.cizel.cn/
-  1phan: http://1phan.cc
-  liuil: https://www.liuil.top/
-  Ox9A82: http://www.cnblogs.com/Ox9A82/
-  burnegg: http://burnegg.com/
-  jwr-sec: https://jwrsec.cn/
-  苏打: http://sudalover.cn/
-  VeroFess: http://blog.binklac.com
-  bendawang: http://www.bendawang.site/
-  hook: http://weeklyalgo.codes/
-  Flier'blog: http://www.flier.net.cn/
-  mutepig: http://www.mutepig.club
-  Silver: https://blog.iret.xyz/list.aspx
-  Simple: http://simp1e.leanote.com/
-  Processor: http://processor.pub/
+  INFRA: https://vpinfra.github.io/
 
 # 打赏
 # 请在需要打赏的文章的md文件头部，设置属性reward: true
@@ -173,7 +145,7 @@ alipay: /img/alipay.png
 weixin: /img/weixin.png
 
 #是否开启“关于我”。
-aboutme: 一只淹死在二进制海洋里的二进制狗
+aboutme: 向往天空-展翅翱翔
 #aboutme: false
 
 # 是否在新窗口打开链接
@@ -212,7 +184,7 @@ baidu_analytics:
 # http://ibruce.info/2015/04/04/busuanzi/
 visit_counter:
   on: true
-  site_visit: 海贼到访数
+  #site_visit: 海贼到访数
   page_visit: 本页阅读量
 
 # A标签提示
