@@ -45,7 +45,7 @@ subnav:
 
 disqus: 
   on: true
-  shortname: swing
+  shortname: skyli
   # https://help.disqus.com/customer/en/portal/articles/466208-what-s-a-shortname-
   # It is unnecessary to enable disqus here if 
   # you have set "disqus_shortname" in your site's "_config.yml" 
@@ -79,7 +79,7 @@ youyan:
 ## "on: true": 自动随机显示这5张图片
 ## "on: false": 自定义显示图片设置background_image: 5
 background:
-  on: true
+  on: false
   #on: false
   background_sum: 24
   background_image: 109
