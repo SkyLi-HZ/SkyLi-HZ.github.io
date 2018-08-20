@@ -3,6 +3,7 @@ node_js: stable
 
 script:
   - hexo clean
+  - hexo generate
 
 after_script:
   - sed -i "s/github_token/${github_token}/g" ./_config.yml
