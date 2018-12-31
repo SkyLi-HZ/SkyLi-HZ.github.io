@@ -79,13 +79,13 @@ youyan:
 background:
 #  on: true
   on: false
-#  background_sum: 24
-  background_image: 109
+  background_sum: 24
+  background_image: 25
 
 highlight_style:
   on: true
-  inline_code: 5
-  code_block: 5
+  inline_code: 8
+  code_block: 3
   # Set inline_code to style highlight text
   # Chose a highlight theme for code block
   # 通过 inline_code 切换内置文本高亮样式 Value: 0 - 9 可选
