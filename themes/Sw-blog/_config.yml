@@ -12,7 +12,7 @@ menu:
 avatar: img/head.jpg
 
 # Small icon of Your site | 站点小图标地址
-favicon: "https://raw.githubusercontent.com/lz330718637/Images/master/20180819231010.png"
+favicon: https://raw.githubusercontent.com/lz330718637/Images/master/20180819231010.png
 
 
 # Social info. Bar | 社交信息展示
@@ -77,8 +77,8 @@ youyan:
 ## "on: true": 自动随机显示这5张图片
 ## "on: false": 自定义显示图片设置background_image: 5
 background:
-#  on: true
-  on: false
+  on: true
+#  on: false
   background_sum: 24
   background_image: 25
 
