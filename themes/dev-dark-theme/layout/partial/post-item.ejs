@@ -1,0 +1,20 @@
+<article class="posts__post">
+    <a 
+        class="posts__post__title" 
+        href="/<%- lang %>/<%- url_data(categories) %>/<%- url_title(title) %>"
+        target="_blank"
+        title="<%- description %>">
+        <h2>
+            <%- title %></h2>
+    </a>
+    <a 
+        class="posts__post__category" 
+        href="/categories/<%- url_data(categories) %>"
+        title="<%= __('category') %>">
+        <%- first_data(categories) %></a>
+    <time 
+        class="posts__post__day" 
+        datetime="<%- date(datetime, 'YYYY-MM-DD') %>" 
+        title="<%= __('published') %> <%- date(datetime, 'D MMM YYYY') %>">
+        <%- date(datetime, 'D MMM YYYY') %></time>
+</article>
