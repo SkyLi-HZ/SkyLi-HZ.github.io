@@ -1,7 +1,8 @@
 ---
 title: 菜鸟浅谈Hystrix
 date: 2018-08-15 22:12:45
-categories：微服务
+categories: 微服务
+tags: [高可用]
 ---
 ## Hystrix是什么？
  Hystrix 是[Netflix](https://www.netflix.com/)为了预防服务间因某个服务故障导致整个系统雪崩而设计的高可用服务容错框架！有点抽象？往下看。。。
