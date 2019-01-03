@@ -128,6 +128,7 @@ tagcloud: true
 # friends: false
 friends:
   INFRA: https://vpinfra.github.io/
+  WANGFENG: https://www.wangfeng.pro/
 
 # 打赏
 # 请在需要打赏的文章的md文件头部，设置属性reward: true
