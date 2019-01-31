@@ -113,7 +113,7 @@ EJ针对作业有三种配置：
 其中该方法的第一个形参为要执行任务的class对象：
 ```
 @Component
-public class MySimpleTask implements SimpleJob {
+public class MyThreeTask implements SimpleJob {
     @Override
     public void execute(ShardingContext sc) {
         System.out.println(String.format("任务名称:%s\n 分片项%s\n 分片总数%s\n 分片参数%s\n"
@@ -141,7 +141,7 @@ elastic.job.sharding-parameters=0=A,1=B
 private SimpleJob myThreeTask;
 
 @Bean(initMethod = "init")
-public JobScheduler mySecondJobScheduler() {
+public JobScheduler myThreeJobScheduler() {
         return new SpringJobScheduler(myThreeTask, zookeeperRegistryCenter, getLiteJobConfiguration(myThreeTask.getClass(), scheduleCron, shardingTotalCount, null));
 }
 ```
@@ -154,11 +154,11 @@ public JobScheduler mySecondJobScheduler() {
 
 不知大家有没有发现有什么不妥的地方？ 定义一个简单的分布式作业需要配置大量的代码，无论你采用什么方式（xml或者java显示配置）。
 
-那么在springboot盛行的今天，快速敏捷开发成了主流趋势，我们需要尽量少的配置便可以将EJ整合到项目中，而EJ官方并没有针对springboot项目提供官方的starter依赖。基于此需求也方便司内同事可以快速使用EJ，本人封装了一套EJ的starter依赖，目前只是针对SimpleJob类型的作业提供支持。该starter目前处于公司司内部项目使用阶段，后期会公布在本人的GitHub上。
+那么在SpringBoot盛行的今天，快速敏捷开发成了主流趋势，我们需要尽量少的配置便可以将EJ整合到项目中，而EJ官方并没有针对SpringBoot项目提供官方的starter依赖。基于此需求也方便司内同事可以快速使用EJ，本人封装了一套EJ的starter依赖，目前只是针对SimpleJob类型的作业提供支持。该starter目前处于公司司内部项目使用阶段，后期会公布在本人的GitHub上。
 
 
 下面简单介绍改starter依赖的使用方法：
-首先需要在pom文件中引用该starter（目前该项目只发布在司内Maven仓库中，外部不可用）：
+首先需要在pom文件中引用该starter（目前该项目只发布在公司内部Maven仓库中，外部不可用）：
 ```
 <dependency>
     <groupId>com.vpgame.infra</groupId>
