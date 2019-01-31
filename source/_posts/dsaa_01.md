@@ -7,7 +7,7 @@ tags: [数据结构与算法]
 
 正式进入专题之前，首先给一张关于数据结构与算法的图谱：图片来源与极客时间王争大神的数据结构与算法专栏课中。
 
-![数据结构与算法](https://raw.githubusercontent.com/lz330718637/Images/master/20190106213154.png)
+>>>>>![数据结构与算法](https://raw.githubusercontent.com/lz330718637/Images/master/20190106213154.png)
 
 下面我们进入正题：
 数据结构与算法的目的就是让我们的程序执行时间更快，存储空间更省。那我们如何来评价一个算法的好坏，评价的依据又是什么呢？
@@ -40,7 +40,7 @@ tags: [数据结构与算法]
 
 2.常见的时间复杂度类别分析实例：
 
-![时间复杂度类别](https://raw.githubusercontent.com/lz330718637/Images/master/20190106222850.png)
+>>>>![时间复杂度类别](https://raw.githubusercontent.com/lz330718637/Images/master/20190106222850.png)
 
 * 常量阶O(1)
 常量阶O(1)并不表示代码只执行了一行，通常代码中只要没有循环，递归；则再多的代码时间复杂度也为O(1).

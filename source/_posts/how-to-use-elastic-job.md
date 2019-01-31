@@ -1,16 +1,16 @@
 ---
 title: Elastic-Job 使用详解
 date: 2019-01-31 13:12:45
-categories: 中间件Elastic-jb
+categories: 中间件:Elastic-job
 tags: [弹性计算]
 ---
-<span style="color:#f8f8f8">EJ</span>(Elastic-Job,下文所有命名使用该简写)应用场景：
+EJ(Elastic-Job,下文所有命名使用该简写)应用场景：
 >1、分布式环境中运行应用定时任务。
 
 EJ是当当网开源的一个分布式任务调度的框架，该项目是基于Quartz、Zookeeper进行的二次开发。其最大的优点在于支持服务器的动态弹性扩容，并且保证同意作业分片同一时刻只在一个服务器节点上运行。
 
 废话不多说：先上一张EJ整体架构图：
-![EJ架构图](https://raw.githubusercontent.com/lz330718637/Images/master/20190130180105.png)
+>>>>![EJ架构图](https://raw.githubusercontent.com/lz330718637/Images/master/20190130180105.png)
 具体实现原理请参考官方文档：[EJ官方文档](http://elasticjob.io/docs/elastic-job-lite/00-overview/)
 
 下面主要说下如何将EJ整合到项目中；官网提供了两种方式：SpringXML、Java配置；
@@ -103,10 +103,12 @@ EJ针对作业有三种配置：
 每种配置相互相互依赖，最终确定一个作业的配置，举个获取作业配的栗子：
 ```
  private LiteJobConfiguration getLiteJobConfiguration(final Class<? extends SimpleJob> jobClass, final String cron, final int shardingTotalCount, String shardingParamters) {
-        return LiteJobConfiguration.newBuilder(new SimpleJobConfiguration(JobCoreConfiguration.newBuilder(jobClass.getName()
+        return LiteJobConfiguration.newBuilder(
+                new SimpleJobConfiguration(JobCoreConfiguration.newBuilder(jobClass.getName()
                 , cron, shardingTotalCount).shardingItemParameters(shardingParamters).build()
-                , jobClass.getCanonicalName())).overwrite(true).build();
-    }
+                , jobClass.getCanonicalName()))
+                .overwrite(true).build();
+ }
 ```
 其中该方法的第一个形参为要执行任务的class对象：
 ```
@@ -115,7 +117,8 @@ public class MySimpleTask implements SimpleJob {
     @Override
     public void execute(ShardingContext sc) {
         System.out.println(String.format("任务名称:%s\n 分片项%s\n 分片总数%s\n 分片参数%s\n"
-                , sc.getJobName(), sc.getShardingItem()
+                , sc.getJobName()
+                , sc.getShardingItem()
                 , sc.getShardingTotalCount()
                 , sc.getShardingParameter()));
 }
@@ -145,9 +148,9 @@ public JobScheduler mySecondJobScheduler() {
 
 这样一个可以在分布式环境中运行的Job便定义好了，spring项目在多个服务器中运行时，该Job便能根据分片策略将不同的分片分派到指定服务器运行了,看下运行结果（两台服务器）：
 服务器1:
-![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131125146.png)
+>>>![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131125146.png)
 服务器2：
-![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131130623.png)
+>>>![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131130623.png)
 
 不知大家有没有发现有什么不妥的地方？ 定义一个简单的分布式作业需要配置大量的代码，无论你采用什么方式（xml或者java显示配置）。
 
@@ -177,19 +180,20 @@ zk.elastic.job.namespace=skyli
         , shardingParameters = "0=A,1=B")
 public class MyThreeTask implements SimpleJob {
     @Override
-    public void execute(ShardingContext shardingContext) {
+    public void execute(ShardingContext sc) {
         System.out.println(String.format("任务名称:%s\n 分片项%s\n 分片总数%s\n 分片参数%s\n"
-                , shardingContext.getJobName(), shardingContext.getShardingItem()
-                , shardingContext.getShardingTotalCount()
-                , shardingContext.getShardingParameter()));
+                , sc.getJobName()
+                , sc.getShardingItem()
+                , sc.getShardingTotalCount()
+                , sc.getShardingParameter()));
     }
 }
 
 ```
 分别将项目在不同服务器上启动，便可以看到定义的作业在不同机器上运行的情况（运行结果与上述单独配置运行结果相同）：
 服务器1:
-![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131125146.png)
+>>>![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131125146.png)
 服务器2：
-![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131130623.png)
+>>>![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131130623.png)
 
 OK，如何将EJ整合到项目中就说到这里吧！^_^
