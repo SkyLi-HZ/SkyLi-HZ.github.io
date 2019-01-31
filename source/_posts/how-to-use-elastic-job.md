@@ -5,12 +5,12 @@ categories: 中间件:Elastic-job
 tags: [弹性计算]
 ---
 EJ(Elastic-Job,下文所有命名使用该简写)应用场景：
->1、分布式环境中运行应用定时任务。
+1、分布式环境中运行应用定时任务。
 
 EJ是当当网开源的一个分布式任务调度的框架，该项目是基于Quartz、Zookeeper进行的二次开发。其最大的优点在于支持服务器的动态弹性扩容，并且保证同意作业分片同一时刻只在一个服务器节点上运行。
 
 废话不多说：先上一张EJ整体架构图：
->>>>![EJ架构图](https://raw.githubusercontent.com/lz330718637/Images/master/20190130180105.png)
+![EJ架构图](https://raw.githubusercontent.com/lz330718637/Images/master/20190131141956.png)
 具体实现原理请参考官方文档：[EJ官方文档](http://elasticjob.io/docs/elastic-job-lite/00-overview/)
 
 下面主要说下如何将EJ整合到项目中；官网提供了两种方式：SpringXML、Java配置；
