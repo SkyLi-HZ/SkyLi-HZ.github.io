@@ -100,7 +100,7 @@ EJ针对作业有三种配置：
 2. JobTypeConfiguration
 3. JobRootConfiguration
 
-每种配置相互相互依赖，最终确定一个作业的配置，举个获取作业配的栗子：
+每种配置相互依赖，最终确定一个作业的配置，举个获取作业配的栗子：
 ```
  private LiteJobConfiguration getLiteJobConfiguration(final Class<? extends SimpleJob> jobClass, final String cron, final int shardingTotalCount, String shardingParamters) {
         return LiteJobConfiguration.newBuilder(
@@ -148,9 +148,9 @@ public JobScheduler mySecondJobScheduler() {
 
 这样一个可以在分布式环境中运行的Job便定义好了，spring项目在多个服务器中运行时，该Job便能根据分片策略将不同的分片分派到指定服务器运行了,看下运行结果（两台服务器）：
 服务器1:
->>>![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131125146.png)
+![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131125146.png)
 服务器2：
->>>![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131130623.png)
+![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131130623.png)
 
 不知大家有没有发现有什么不妥的地方？ 定义一个简单的分布式作业需要配置大量的代码，无论你采用什么方式（xml或者java显示配置）。
 
@@ -168,8 +168,8 @@ public JobScheduler mySecondJobScheduler() {
 ```
 然后需要在spring application.properties或者yml文件中添加zk配置：
 ```
-zk.elastic.job.server-lists=192.168.7.87:2181
-zk.elastic.job.namespace=skyli
+zk.elastic.job.server-lists=ip:port
+zk.elastic.job.namespace=your namespace
 ```
 紧接着只需要在定义Job是在类声明时添加@JobConf注解便能完成分布式Job的定义：
 ```
@@ -192,8 +192,8 @@ public class MyThreeTask implements SimpleJob {
 ```
 分别将项目在不同服务器上启动，便可以看到定义的作业在不同机器上运行的情况（运行结果与上述单独配置运行结果相同）：
 服务器1:
->>>![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131125146.png)
+![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131125146.png)
 服务器2：
->>>![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131130623.png)
+![](https://raw.githubusercontent.com/lz330718637/Images/master/20190131130623.png)
 
 OK，如何将EJ整合到项目中就说到这里吧！^_^
