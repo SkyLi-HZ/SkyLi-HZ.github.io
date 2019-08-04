@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
 <meta property="og:title" content="SkyLi&#39;s Thinking IN Java">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta property="og:url" content="http://www.skyli-blog.cn/archives/index.html">
 <meta property="og:site_name" content="SkyLi&#39;s Thinking IN Java">
 <meta property="og:locale" content="default">
 <meta name="twitter:card" content="summary">
@@ -16,7 +16,7 @@
     <link rel="alternative" href="/atom.xml" title="SkyLi&#39;s Thinking IN Java" type="application/atom+xml">
   
   
-    <link rel="icon" href="/img/favicon.png">
+    <link rel="icon" href="/img/head.jpg">
   
   
       <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
@@ -51,17 +51,67 @@
     <div class="overlay"></div>
 <div class="intrude-less">
     <header id="header" class="inner">
+        <script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
         <a href="/" class="profilepic">
             
-            <img lazy-src="/img/head.jpg" class="js-avatar">
+            <img lazy-src="img/head.jpg" class="js-avatar">
             
         </a>
-
         <hgroup>
-          <h1 class="header-author"><a href="/" title="Hi Mate">SkyLi</a></h1>
+          <h1 class="header-author"><a href="/">SkyLi</a></h1>
         </hgroup>
-
         
+        
+            <form>
+                <input type="text" class="st-default-search-input search" id="local-search-input" placeholder="搜索一下" autocomplete="off">
+            </form>
+            <div id="local-search-result"></div>
+        
+        
+            <script type="text/javascript">
+                (function() {
+                    'use strict';
+                    function getMatchData(keyword, data) {
+                        var matchData = [];
+                        for(var i =0;i<data.length;i++){
+                            if(data[i].title.toLowerCase().indexOf(keyword)>=0) 
+                                matchData.push(data[i])
+                        }
+                        return matchData;
+                    }
+                    var $input = $('#local-search-input');
+                    var $resultContent = $('#local-search-result');
+                    $input.keyup(function(){
+                        $.ajax({
+                            url: '/search.json',
+                            dataType: "json",
+                            success: function( json ) {
+                                var str='<ul class=\"search-result-list\">';                
+                                var keyword = $input.val().trim().toLowerCase();
+                                $resultContent.innerHTML = "";
+                                if ($input.val().trim().length <= 0) {
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                var results = getMatchData(keyword, json);
+                                if(results.length === 0){
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                } 
+                                for(var i =0; i<results.length; i++){
+                                    str += "<li><a href='"+ results[i].url +"' class='search-result-title'>"+ results[i].title +"</a></li>";
+                                }
+                                str += "</ul>";
+                                $resultContent.empty();
+                                $resultContent.append(str);
+                                $('#switch-area').hide();
+                            }
+                        });
+                    });
+                })();
+            </script>
         
         
             <div id="switch-btn" class="switch-btn">
@@ -87,7 +137,6 @@
                         </div>
                         
                     </div>
-                    
                 </div>
                 <div class="tips-box hide">
                     <div class="tips-arrow"></div>
@@ -104,73 +153,66 @@
                 </div>
             </div>
         
-
         <div id="switch-area" class="switch-area">
             <div class="switch-wrap">
                 <section class="switch-part switch-part1">
                     <nav class="header-menu">
                         <ul>
                         
-                            <li><a href="/Home">博客首页</a></li>
+                            <li><a  href="https://skyli-hz.github.io/">博客首页</a></li>
                         
-                            <li><a href="/works">作品展示</a></li>
+                            <li><a  href="/archives">文章归档</a></li>
                         
-                            <li><a href="/about">留言打卡</a></li>
-                        
-                            <li><a href="/FrontEndGuide">前端导航</a></li>
+                            <li><a  href="/resume">个人简历</a></li>
                         
                         </ul>
                     </nav>
                     <nav class="header-nav">
                         <ul class="social">
                             
-                                <a class="fl mail" target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=PAkNDgsKBQ4MCnxNTRJfU1E" title="mail">mail</a>
+                                <a class="fl facebook"  target="_blank" href="https://www.facebook.com/sky.li.7712" title="facebook">facebook</a>
                             
-                                <a class="fl github" target="_blank" href="https://github.com/luuman" title="github">github</a>
+                                <a class="fl mail"  target="_blank" href="/" title="mail">mail</a>
                             
-                                <a class="fl zhihu" target="_blank" href="#" title="zhihu">zhihu</a>
+                                <a class="fl github"  target="_blank" href="/" title="github">github</a>
                             
-                                <a class="fl weibo" target="_blank" href="#" title="weibo">weibo</a>
+                                <a class="fl zhihu"  target="_blank" href="/" title="zhihu">zhihu</a>
                             
-                                <a class="fl google" target="_blank" href="#" title="google">google</a>
-                            
-                                <a class="fl twitter" target="_blank" href="#" title="twitter">twitter</a>
-                            
-                                <a class="fl linkedin" target="_blank" href="#" title="linkedin">linkedin</a>
+                                <a class="fl weibo"  target="_blank" href="/" title="weibo">weibo</a>
                             
                         </ul>
                     </nav>
                 </section>
                 
-                
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        
+                        <a href="/tags/弹性计算/" style="font-size: 10px;">弹性计算</a> <a href="/tags/数据结构与算法/" style="font-size: 10px;">数据结构与算法</a> <a href="/tags/日常/" style="font-size: 20px;">日常</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/高可用/" style="font-size: 10px;">高可用</a>
                     </div>
                 </section>
-                
                 
                 
                 <section class="switch-part switch-part3">
                     <div id="js-friends">
                     
-                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://luuman.github.io/">name</a>
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="https://vpinfra.github.io/">INFRA</a>
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="https://www.wangfeng.pro/">WANGFENG</a>
                     
                     </div>
                 </section>
                 
-
                 
                 
                 <section class="switch-part switch-part4">
                 
-                    <div id="js-aboutme">纯海迷、爱运动、爱交友、爱旅行、喜欢接触新鲜事物、迎接新的挑战，更爱游离于错综复杂的编码与逻辑中</div>
+                    <div id="js-aboutme">向往天空-展翅翱翔</div>
                 </section>
                 
             </div>
         </div>
-    </header>                
+    </header>
 </div>
+
     </div>
     <div class="mid-col">
       <nav id="mobile-nav">
@@ -192,13 +234,11 @@
             <nav class="header-menu">
                 <ul>
                 
-                    <li><a href="/Home">博客首页</a></li>
+                    <li><a href="https://skyli-hz.github.io/">博客首页</a></li>
                 
-                    <li><a href="/works">作品展示</a></li>
+                    <li><a href="/archives">文章归档</a></li>
                 
-                    <li><a href="/about">留言打卡</a></li>
-                
-                    <li><a href="/FrontEndGuide">前端导航</a></li>
+                    <li><a href="/resume">个人简历</a></li>
                 
                 <div class="clearfix"></div>
                 </ul>
@@ -206,19 +246,15 @@
             <nav class="header-nav">
                 <div class="social">
                     
-                        <a class="mail" target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=PAkNDgsKBQ4MCnxNTRJfU1E" title="mail">mail</a>
+                        <a class="facebook" target="_blank" href="https://www.facebook.com/sky.li.7712" title="facebook">facebook</a>
                     
-                        <a class="github" target="_blank" href="https://github.com/luuman" title="github">github</a>
+                        <a class="mail" target="_blank" href="/" title="mail">mail</a>
                     
-                        <a class="zhihu" target="_blank" href="#" title="zhihu">zhihu</a>
+                        <a class="github" target="_blank" href="/" title="github">github</a>
                     
-                        <a class="weibo" target="_blank" href="#" title="weibo">weibo</a>
+                        <a class="zhihu" target="_blank" href="/" title="zhihu">zhihu</a>
                     
-                        <a class="google" target="_blank" href="#" title="google">google</a>
-                    
-                        <a class="twitter" target="_blank" href="#" title="twitter">twitter</a>
-                    
-                        <a class="linkedin" target="_blank" href="#" title="linkedin">linkedin</a>
+                        <a class="weibo" target="_blank" href="/" title="weibo">weibo</a>
                     
                 </div>
             </nav>
@@ -234,7 +270,7 @@
       
       <section class="archives-wrap">
         <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
+          <a href="/archives/2019" class="archive-year">2019</a>
         </div>
         <div class="archives">
     
@@ -242,21 +278,29 @@
   <div class="archive-article-inner">
     <header class="archive-article-header">
           <div class="article-meta">
-              <a href="/2018/12/31/hello-world/" class="archive-article-date">
-      <time datetime="2018-12-31T12:40:36.732Z" itemprop="datePublished">12-31</time>
+              <a href="/2019/07/29/HashMap/" class="archive-article-date">
+      <time datetime="2019-07-29T14:12:45.000Z" itemprop="datePublished">07-29</time>
 </a>
         </div>
          
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/12/31/hello-world/">Hello World</a>
+      <a class="archive-article-title" href="/2019/07/29/HashMap/">HashMap 浅析</a>
     </h1>
   
 
         <div class="article-info info-on-archive">
           
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+    </div>
+
 
           
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码/">源码</a></li></ul>
+    </div>
+
         </div>
         <div class="clearfix"></div>
     </header>
@@ -269,21 +313,179 @@
   <div class="archive-article-inner">
     <header class="archive-article-header">
           <div class="article-meta">
-              <a href="/2018/08/20/hystrix-principle/" class="archive-article-date">
-      <time datetime="2018-08-20T04:43:31.815Z" itemprop="datePublished">08-20</time>
+              <a href="/2019/01/31/how-to-use-elastic-job/" class="archive-article-date">
+      <time datetime="2019-01-31T05:12:45.000Z" itemprop="datePublished">01-31</time>
 </a>
         </div>
          
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/20/hystrix-principle/">菜鸟浅谈Hystrix</a>
+      <a class="archive-article-title" href="/2019/01/31/how-to-use-elastic-job/">Elastic-Job 使用详解</a>
     </h1>
   
 
         <div class="article-info info-on-archive">
           
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/中间件-Elastic-job/">中间件:Elastic-job</a>
+    </div>
+
 
           
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/弹性计算/">弹性计算</a></li></ul>
+    </div>
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+          <div class="article-meta">
+              <a href="/2019/01/06/dsaa_01/" class="archive-article-date">
+      <time datetime="2019-01-06T14:12:45.000Z" itemprop="datePublished">01-06</time>
+</a>
+        </div>
+         
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/01/06/dsaa_01/">算法复杂度分析(上)：时间复杂度</a>
+    </h1>
+  
+
+        <div class="article-info info-on-archive">
+          
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机基础/">计算机基础</a>
+    </div>
+
+
+          
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+    </div>
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+          <div class="article-meta">
+              <a href="/2019/01/01/what-is-the-encoding/" class="archive-article-date">
+      <time datetime="2018-12-31T16:00:00.000Z" itemprop="datePublished">01-01</time>
+</a>
+        </div>
+         
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/01/01/what-is-the-encoding/">彻底搞懂计算机编码</a>
+    </h1>
+  
+
+        <div class="article-info info-on-archive">
+          
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机基础/">计算机基础</a>
+    </div>
+
+
+          
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/日常/">日常</a></li></ul>
+    </div>
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+    
+    
+      
+        </div></section>
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2018" class="archive-year">2018</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+          <div class="article-meta">
+              <a href="/2018/08/15/hystrix-principle/" class="archive-article-date">
+      <time datetime="2018-08-15T14:12:45.000Z" itemprop="datePublished">08-15</time>
+</a>
+        </div>
+         
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2018/08/15/hystrix-principle/">菜鸟浅谈Hystrix</a>
+    </h1>
+  
+
+        <div class="article-info info-on-archive">
+          
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/微服务/">微服务</a>
+    </div>
+
+
+          
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高可用/">高可用</a></li></ul>
+    </div>
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+          <div class="article-meta">
+              <a href="/2018/08/13/hello-world/" class="archive-article-date">
+      <time datetime="2018-08-13T14:12:45.000Z" itemprop="datePublished">08-13</time>
+</a>
+        </div>
+         
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2018/08/13/hello-world/">Hello World</a>
+    </h1>
+  
+
+        <div class="article-info info-on-archive">
+          
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/技巧/">技巧</a>
+    </div>
+
+
+          
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/日常/">日常</a></li></ul>
+    </div>
+
         </div>
         <div class="clearfix"></div>
     </header>
@@ -301,17 +503,17 @@
     <div class="outer">
         <div id="footer-info">
             <div class="footer-left">
-                &copy; 2018 SkyLi
+                &copy; 2019 SkyLi
             </div>
             <div class="footer-right">
-                <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/luuman/hexo-theme-spfk" target="_blank">spfk</a> by luuman
+                More Themes in <a href="http://hexo.io/" target="_blank">Hexo</a> ^_^ And welcome to <a href="https://www.skyli-blog.cn/" target="_blank">skyli-blog</a>
             </div>
         </div>
         
             <div class="visit">
                 
                     <span id="busuanzi_container_site_pv" style='display:none'>
-                        <span id="site-visit" >海贼到访数: 
+                        <span id="site-visit" >博客到访量: 
                             <span id="busuanzi_value_site_uv"></span>
                         </span>
                     </span>
@@ -375,32 +577,23 @@
 <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
 </script>
 
-  <script language="javascript">
-    $(function() {
-        $("a[title]").each(function() {
-            var a = $(this);
-            var title = a.attr('title');
-            if (title == undefined || title == "") return;
-            a.data('title', title).removeAttr('title').hover(
 
-            function() {
-                var offset = a.offset();
-                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
-                    top: offset.top - a.outerHeight() - 15,
-                    left: offset.left + a.outerWidth()/2 + 1
-                }).fadeIn(function() {
-                    var pop = $(this);
-                    setTimeout(function() {
-                        pop.remove();
-                    }, pop.text().length * 800);
-                });
-            }, function() {
-                $("#anchortitlecontainer").remove();
-            });
-        });
-    });
-</script>
+    <script type="text/javascript">
+      window.onload = function(){
+        document.getElementById("search").onclick = function(){
+            console.log("search")
+            search();
+        }
+      }
+      function search(){
+        (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+        (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+        e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+        })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
 
+        _st('install','A1Pz-LKMXbrzcFg2FWi6','2.0.0');
+      }
+    </script>
 
   </div>
 </body>

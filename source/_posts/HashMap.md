@@ -7,14 +7,14 @@ tags: 源码
 
 # HashMap解析
 
-1. **HashMap概述**：
+1. HashMap概述：
 
    HashMap实现了映射关系接口Map,是一种可处理键值对的数据结构。
    
 
-2.  **HashMap数据结构**：
+2.  HashMap数据结构：
 
-    * 数组：```Node<K,V>[] table ```
+    * 数组：Node<K,V>[] table
 
     * 链表： 
 ``` java
@@ -40,7 +40,7 @@ static class Node<K,V> implements Map.Entry<K,V> {
         }
 ```
 
-3. **HashMap功能实现**：
+3. HashMap功能实现：
 
  **基本概念**：
 
@@ -50,7 +50,7 @@ static class Node<K,V> implements Map.Entry<K,V> {
 
     3、threshold: threshold = length * loadFactor： 当HashMap中的key的数量达到该值时会自动扩容。
     
-**有参构造方法:**
+* 有参构造方法:
 
 ``` java
 public HashMap(int initialCapacity, float loadFactor) {
@@ -67,7 +67,7 @@ public HashMap(int initialCapacity, float loadFactor) {
     }
 ```
 
-**tableSizeFor 解析（NB）：**
+* tableSizeFor 解析（NB）
 
 在构造hashMap时，构造方法会根据实参（cap）来计算hash桶数组长度。计算方法为：tableSizeFor
 该函数作用：根据传进来的参数得到大于且最接近该参数并且是2的幂次方的数字作为hash桶数组的长度。
@@ -86,7 +86,7 @@ static final int tableSizeFor(int cap) {
         return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
     }
 ```
-函数第一行 ``` int n = cap -1``` 这里的 cap 为什么要减 1 ？
+函数第一行  int  n = cap -1  这里的 cap 为什么要减 1 ？
 弄清原因之前我们需要先来看下该函数主要做了什么操作：该函数主要对cap 进行了一系列的移位或操作，这些操作的目的是什么？我们取一个数字并将以为过程展示出来:
 这里我们假设
 ```math
@@ -103,7 +103,7 @@ n = 2^{31}
 ```
 上述操作的最终目的是要把 n 的最高位右边的所有位置 1 。一遍可以找出大于该数并且是2的幂次方。那为什么要在移位或操作前先进行 cap -1 操作呢？因为如果 cap 已经是2的幂次方了（说明cap 已经满足要求，那该函数最终应该返回cap），如果不进行 cap -1 操作的话，该函数最终将返回 cap * 2，这显然不符合要求。
 
-**定位Node所在哈希桶索引:**
+* 定位Node所在哈希桶索引:
 
 hash(key) -> 高位运算 -> 取模运算
 
@@ -140,7 +140,7 @@ static final int hash(Object key) {
     }
 ```
 
-**向HashMap中加入键值对：**
+* 向HashMap中加入键值对
 
 ``` java
 public V put(K key, V value) {
@@ -201,7 +201,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 ```
 从``` put()``` 源码中我们可以看到，HashMap在首次put时才初始化hash桶数组，这种设计理念很好的避免了初始加载的内存浪费问题（要避免占着坑位不拉**的场景）。
 
-**HashMap 扩容：**
+* HashMap 扩容：
 
 1、JDK 1.7:
 ``` java
@@ -361,7 +361,7 @@ final Node<K,V>[] resize() {
 
 JDK8中采用4个Node（hiHead、hiTail、loHead、loTail）节点(采用尾插发)来保证转移后的高低bucket中的链表顺序，不会出现JDK7中链表转移到新数组中的倒置问题。
 
-**HashMap使用注意事项：**
+* HashMap使用注意事项：
 
     1、禁止使用可变对象作为key.
 任何对象的hashcode方法继承于Object基类。其取对象在堆内存中的对象的起始地址，如果选择重写对象的hashcode方法，则hashcode的生成应尽量避免关联对象属性。否则，在改变对象的field属性时，对应的hashcode值也会变更，从而无法操作先前存入的value，造成内存泄漏。
