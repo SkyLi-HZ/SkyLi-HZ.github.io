@@ -1,22 +1,19 @@
----
-title: HashMap 浅析
-date: 2019-07-29 22:12:45
-categories: Java
-tags: 源码
----
+# HashMap浅析
 
-# HashMap解析
 
-1. HashMap概述：
 
-   HashMap实现了映射关系接口Map,是一种可处理键值对的数据结构。
+### **HashMap概述**：
+
+HashMap实现了映射关系接口Map,是一种可处理键值对的数据结构。在日常开发中，HashMap 经常用来临时存放数据。其底层数据结构基本能达到 O(1) 的查询性能。
    
 
-2.  HashMap数据结构：
+###  **HashMap数据结构**：
+在 JDK7 中 HashMap 底层数据结构采用的是： 数组 + 链表。 该中数据结构的组合基本能满足 HashMap 的功能。但是随着数据量激增的情况下，频繁的 Hash 冲突使链表的长度逐渐增长，有可能查询性能退化成 O(n)。
+JDK8 中引入了红黑树，利用红黑树的强大性能来解决 HashMap 的性能问题。 下面是 HashMap 底层数据结构的声明定义：
 
-    * 数组：Node<K,V>[] table
+   > 数组：```Node<K,V>[] table ```
 
-    * 链表： 
+   > 链表： 
 ``` java
 static class Node<K,V> implements Map.Entry<K,V> {
         final int hash;
@@ -27,7 +24,8 @@ static class Node<K,V> implements Map.Entry<K,V> {
         }
 ```
 
-   * 红黑树（JDK8）：
+
+   > 红黑树（JDK8）：
    
 ``` java
  static final class TreeNode<K,V> extends LinkedHashMap.Entry<K,V> {
@@ -40,7 +38,9 @@ static class Node<K,V> implements Map.Entry<K,V> {
         }
 ```
 
-3. HashMap功能实现：
+### **HashMap功能实现**：
+
+熟悉 HashMap 的功能实现之前，先来看下 HashMap 中几个基本概念：
 
  **基本概念**：
 
@@ -50,7 +50,9 @@ static class Node<K,V> implements Map.Entry<K,V> {
 
     3、threshold: threshold = length * loadFactor： 当HashMap中的key的数量达到该值时会自动扩容。
     
-* 有参构造方法:
+**有参构造方法:**
+
+HashMap 默认无参构造方法会初始化一个默认大小为 16 的实例。这里主要看下有参有参构造方法：
 
 ``` java
 public HashMap(int initialCapacity, float loadFactor) {
@@ -67,15 +69,15 @@ public HashMap(int initialCapacity, float loadFactor) {
     }
 ```
 
-* tableSizeFor 解析（NB）
+**tableSizeFor 解析（NB）：**
 
 在构造hashMap时，构造方法会根据实参（cap）来计算hash桶数组长度。计算方法为：tableSizeFor
 该函数作用：根据传进来的参数得到大于且最接近该参数并且是2的幂次方的数字作为hash桶数组的长度。
 
 ``` java
-/**
-     * Returns a power of two size for the given target capacity.
-     */
+ /**
+  * Returns a power of two size for the given target capacity.
+ */
 static final int tableSizeFor(int cap) {
         int n = cap - 1;
         n |= n >>> 1;
@@ -86,7 +88,7 @@ static final int tableSizeFor(int cap) {
         return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
     }
 ```
-函数第一行  int  n = cap -1  这里的 cap 为什么要减 1 ？
+函数第一行 ``` int n = cap -1``` 这里的 cap 为什么要减 1 ？
 弄清原因之前我们需要先来看下该函数主要做了什么操作：该函数主要对cap 进行了一系列的移位或操作，这些操作的目的是什么？我们取一个数字并将以为过程展示出来:
 这里我们假设
 ```math
@@ -103,26 +105,31 @@ n = 2^{31}
 ```
 上述操作的最终目的是要把 n 的最高位右边的所有位置 1 。一遍可以找出大于该数并且是2的幂次方。那为什么要在移位或操作前先进行 cap -1 操作呢？因为如果 cap 已经是2的幂次方了（说明cap 已经满足要求，那该函数最终应该返回cap），如果不进行 cap -1 操作的话，该函数最终将返回 cap * 2，这显然不符合要求。
 
-* 定位Node所在哈希桶索引:
+**定位Node所在哈希桶索引:**
 
 hash(key) -> 高位运算 -> 取模运算
 
 1、key hashcode + 高位运****算：
-hashMap 中针对key 有专门的hash函数，该函数在Object hash值的基础上取其高16位进行了异或操作。这样做的目的是在hash桶length长度比较小的时候，让Object hash 的高位也能参与到取模操作中，能在一定成都减少hash冲突。
+hashMap 中针对key 有专门的hash函数，该函数在Object hash值的基础上取其高16位进行了异或操作。这样做的目的是在hash桶length长度比较小的时候，让Object hash 的高位也能参与到取模操作中，能在一定程度上减少hash冲突。
+
 ``` java
 static final int hash(Object key) {
         int h;
         return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
     }
 ```
-2、取模运算:hash & (table.length - 1)
-在计算Node在hash桶数组的位置时，通常需要将hash值与桶数组长度取模操作：```hash % table.length```。
-上文中在构造hashMap时 ```tableSizeFor```函数的返回值即hash桶数组的长度。该返回值是一个2的幂次方的数字。而 ```hash & (table.length - 1)``` 与 ```hash % table.length``` 在```table.length```是2的幂次方时的作用是一样的，且 & 操作 比 % 操作 占用的cpu周期更少所以其效率更高。
+
+2、取模运算: hash & (table.length - 1)
+在计算 Node 在 hash 桶数组的位置时，通常需要将 hash 值与桶数组长度取模操作：```hash % table.length```。
+上文中在构造hashMap时 ```tableSizeFor```函数的返回值即 hash 桶数组的长度。该返回值是一个 2 的幂次方的数字。
+而 ```hash & (table.length - 1)``` 与 ```hash % table.length``` 在```table.length```是 2 的幂次方时的作用是一样的，
+且 & 操作 比 % 操作  占用的 cpu 周期更少，所以其效率更高。
+下面是 HashMap get(Object key) 底层获取 Node 的源码， 在代码中我们可以看到使用位运算确定 Node 下标的代码：
 ``` java
     final Node<K,V> getNode(int hash, Object key) {
         Node<K,V>[] tab; Node<K,V> first, e; int n; K k;
         if ((tab = table) != null && (n = tab.length) > 0 &&
-            (first = tab[(n - 1) & hash]) != null) {
+            (first = tab[(n - 1) & hash]) != null) {// 根据 key 的 hash 值确定 key 在 Hash 桶数组中的下标
             if (first.hash == hash && // always check first node
                 ((k = first.key) == key || (key != null && key.equals(k))))
                 return first;
@@ -140,7 +147,9 @@ static final int hash(Object key) {
     }
 ```
 
-* 向HashMap中加入键值对
+**向HashMap中加入键值对：**
+
+下面看下 HashMap 在插入键值对时做了什么操作：
 
 ``` java
 public V put(K key, V value) {
@@ -201,9 +210,11 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 ```
 从``` put()``` 源码中我们可以看到，HashMap在首次put时才初始化hash桶数组，这种设计理念很好的避免了初始加载的内存浪费问题（要避免占着坑位不拉**的场景）。
 
-* HashMap 扩容：
+**HashMap 扩容：**
 
-1、JDK 1.7:
+HashMap 在元素数量达到 threshold 时会进行扩容操作。JDK8 较 JDK7 在扩容操作上作了一定优化，但是基本过程相差不大，下面先看下 JDK7 中的扩容代码：
+1、JDK7:
+
 ``` java
 final Node<K,V>[] resize() {
 void resize(int newCapacity) { //传入新的容量
@@ -247,12 +258,11 @@ void transfer(Entry[] newTable) {
 
 扩容前：
 
-![扩容前](https://raw.githubusercontent.com/lz330718637/Images/master/20190804221245.png)
+![扩容前](https://raw.githubusercontent.com/lz330718637/Images/master/20190807225633.png)
 
 扩容后：
 
-![扩容后](https://raw.githubusercontent.com/lz330718637/Images/master/20190804221030.png)
-
+![扩容后](https://raw.githubusercontent.com/lz330718637/Images/master/20190807230010.png)
 
 这里注意下元素迁移过程中的规律，假设 ```oldCap = 4``` 则新数组长度变为 ```oldCap * 2 = 8 ``` 时，则``` hash & (table.length - 1) ``` 的转变过程为：
 
@@ -262,23 +272,24 @@ void transfer(Entry[] newTable) {
 | 字段名称 |  value(二进制) |数组下标|
 | --- | --- |---|
 | length - 1 | 0000 0000 0000 0000 0000 0000 0000 0011 | |
-| hash(A) | 0010 0000 0110 0000 0000 0000 0000 0010 | 1|
-| hash(B) |0010 0000 0110 0000 0000 0000 0000 0110 | 1|
-| hash(C) |0010 0000 0110 0000 0000 0000 0000 0110 | 1 |
+| hash(key1) | 0010 0000 0110 0000 0000 0000 0000 0010 | 2|
+| hash(key2) |0010 0000 0110 0000 0000 0000 0000 0110 | 2|
+| hash(key3) |0010 0000 0110 0000 0000 0000 0000 0110 | 2 |
 
 扩容后下标：
 
 | 字段名称 |  value(二进制) |数组下标|
 | --- | --- |---|
 | length - 1 | 0000 0000 0000 0000 0000 0000 0000 0111 | |
-| hash(A) | 0010 0000 0110 0000 0000 0000 0000 0010 | 1|
-| hash(B) |0010 0000 0110 0000 0000 0000 0000 0110 | 5 (1 + 4）|
-| hash(C) |0010 0000 0110 0000 0000 0000 0000 0110 | 5  (1 + 4) |
+| hash(key1) | 0010 0000 0110 0000 0000 0000 0000 0010 | 2|
+| hash(key2) |0010 0000 0110 0000 1000 0000 0000 0110 | 6 (2 + 4）|
+| hash(key3) |0010 0000 0110 0000 0000 0000 0000 0110 | 6  (2 + 4) |
 
-当数组扩容后，则``` length -1 ``` 二进制在高位会多一个 1， 即：上表（```length -1 ``` 最低4位）中的 ```0011 -> 0111```,所以凡是``` hash(key)``` 的最高位与length的二进制非零最高位相与不为0的，则在扩容后的数组中下标为 ```oldIndex + oldCap```.
+当数组扩容后，则``` length -1 ``` 二进制在高位会多一个 1， 即：上表（```length -1 ``` 最低4位）中的 ```0011 -> 0111```, 
+所以凡是``` hash(key)``` 的二进制位（上表中参与运算的最低 4 位）与扩容前的 ```length``` 的二进制非零最高位（即0100 ）相与不为 0 的，则在扩容后的数组中下标为 ```oldIndex + oldCap```.
 
-JDK8的这种设计非常巧妙，不仅在针对将老Hash桶数组中的数据迁移到新数组中不用重新计算每个Node的hash值与新数组的取模操作；而且由于每个key 的hash值中对应新增的1bit是 0 还是 1 是随机的，这就保证了在扩容前由于hash冲突而组成链表节点可以均匀的分散到新的bucket中。 并且迁移后的数据不存在倒置问题。
-详情看JDK8的resize（）：
+JDK8 的这种设计非常巧妙，不仅在针对将老 Hash 桶数组中的数据迁移到新数组中不用重新计算每个 Node 的 hash 值与新数组的取模操作；而且由于每个 key 的 hash 值中对应新增的 1bit 是 0 还是 1 是随机的，这就保证了在扩容前由于 hash 冲突而组成链表节点可以均匀的分散到新的 bucket 中。 并且迁移后的数据不存在倒置问题。
+详情看 JDK8 的 resize（）：
 
 ``` java
 final Node<K,V>[] resize() {
@@ -359,15 +370,47 @@ final Node<K,V>[] resize() {
     }
 ```
 
-JDK8中采用4个Node（hiHead、hiTail、loHead、loTail）节点(采用尾插发)来保证转移后的高低bucket中的链表顺序，不会出现JDK7中链表转移到新数组中的倒置问题。
+JDK8 中采用 4 个 Node（hiHead、hiTail、loHead、loTail）节点(采用尾插发)来保证转移后的高低 bucket 中的链表顺序，不会出现 JDK7 中链表转移到新数组中的倒置问题。
 
-* HashMap使用注意事项：
+**HashMap使用注意事项：**
 
     1、禁止使用可变对象作为key.
-任何对象的hashcode方法继承于Object基类。其取对象在堆内存中的对象的起始地址，如果选择重写对象的hashcode方法，则hashcode的生成应尽量避免关联对象属性。否则，在改变对象的field属性时，对应的hashcode值也会变更，从而无法操作先前存入的value，造成内存泄漏。
+任何对象的 hashcode 方法继承于 Object 基类。其取对象在堆内存中的对象的起始地址，如果选择重写对象的 hashcode 方法，则 hashcode 的生成应尽量避免关联对象属性。否则，在改变对象的 field 属性时，对应的 hashcode 值也会变更，从而无法操作先前存入的 value，造成内存泄漏。
 
     2、非线程安全，多线程并发可能会产生数据不一致问题。
-可使用Hashtable 或者 ConcurrentHashMap替换。
+可使用 Hashtable 或者 ConcurrentHashMap 替换。
+
+### Q&A
+
+**Q1 mackong**
+> tableSizeFor 方法中，求 hashTable 的长度时，为什么取 ```capacity -1``` ?
+
+**A1**
+说为什么要用 ```capacity -1``` 之前，需要先说明一下
+
+n |= n >>> 1;
+
+n |= n >>> 2;
+
+n |= n >>> 4;
+
+n |= n >>> 8;
+
+n |= n >>> 16;
+
+(移位并或运算)的作用是什么：这5次操作可将任何一个int类型的数字最高位右边的所有二进制位置 1。
+hashMap 要求桶数组长度必须为 2 的幂次方。所以假设 capacity 已经是2的幂次方，如果不进行```capacity-1```操作的话，经过上述移位并或运算后，最终函数返回的是```capacity * 2```的大小
+
+
+**Q2 mackong**
+> 为什么取模操作使用 ```&（table.length - 1）``` 而不是 ``` %table.length``` ?
+
+**A2**
+由上文的```tableSizeFor``` 方法可知， hashMap 的 bucket 桶数组长度是 2 的幂次方。
+所以 ```hash(key) & (table.length - 1)``` 功能上等价于 ```hash(key)%table.length```,
+ 但是 & 操作 比 % 操作在底层计算时占用的 cpu 周期数不同， 在性能上 & 运算要优于直接 %。
+
+
 
 
         
